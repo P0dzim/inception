@@ -1,0 +1,133 @@
+services:
+  nginx:
+    build: ./requirements/nginx
+    container_name: nginx
+    image: nginx
+    ports: 
+      - "443:443"
+    restart: always
+    env_file: .env
+    networks:
+      - docker_network
+    volumes:
+      - wordpress_volume:/var/www/html
+
+  mariadb:
+    build: ./requirements/mariadb
+    container_name: mariadb
+    image: mariadb
+    restart: always
+    env_file: .env
+    networks:
+      - docker_network
+    volumes:
+      - db_volume:/var/lib/mysql
+    secrets:
+      - db_password
+      - db_root_password
+      - db_manager_password
+
+  wordpress:
+    build: ./requirements/wordpress
+    container_name: wordpress
+    image: wordpress
+    restart: always
+    env_file: .env
+    networks:
+      - docker_network
+    volumes: 
+      - wordpress_volume:/var/www/html
+    secrets:
+      - db_password
+      - wp_user_password
+      - wp_admin_password
+
+  redis:
+    build: ./requirements/bonus/redis
+    container_name: redis
+    image: redis
+    restart: always
+    env_file: .env
+    networks:
+      - docker_network
+    
+  ftp:
+    build: ./requirements/bonus/ftp
+    container_name: ftp
+    image: ftp
+    restart: always
+    env_file: .env
+    networks:
+      - docker_network
+    volumes:
+      - wordpress_volume:/var/www/html
+    ports:
+      - "21:21"
+      - "40000-40005:40000-40005"
+    secrets:
+      - ftp_password
+
+  static_site:
+    build: ./requirements/bonus/static_site
+    container_name: static_site
+    image: static_site
+    restart: always
+    env_file: .env
+    networks:
+      - docker_network
+    ports:
+      - "1313:80"
+
+  adminer:
+    build: ./requirements/bonus/adminer
+    container_name: adminer
+    image: adminer
+    restart: always
+    networks:
+      - docker_network
+    ports:
+      - "1414:8080"
+
+  portainer:
+    build: ./requirements/bonus/portainer
+    container_name: portainer
+    image: portainer
+    restart: always
+    networks:
+      - docker_network
+    ports:
+      - "1515:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  docker_network:
+    driver: bridge
+
+volumes:
+  db_volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/vitor/data/mariadb
+  wordpress_volume:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/vitor/data/wordpress
+
+secrets:
+  db_password:
+    file: ../secrets/db_password.txt
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_manager_password:
+    file: ../secrets/db_manager_password.txt
+  wp_user_password:
+    file: ../secrets/wp_user_password.txt
+  wp_admin_password:
+    file: ../secrets/wp_admin_password.txt
+  ftp_password:
+    file: ../secrets/ftp_password.txt
