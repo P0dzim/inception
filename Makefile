@@ -4,7 +4,7 @@ all:
 	@mkdir -p /home/vitosant/data
 	@mkdir -p /home/vitosant/data/mariadb
 	@mkdir -p /home/vitosant/data/wordpress
-	docker compose -f ./vitosant/docker-compose.yml up -d --build
+	docker compose -f ./srcs/docker-compose.yml up -d --build
 
 down:
 	docker compose -f ./srcs/docker-compose.yml down
