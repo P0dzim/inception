@@ -3,7 +3,7 @@ services:
     build: ./requirements/nginx
     container_name: nginx
     image: nginx
-    ports: 
+    ports:
       - "443:443"
     restart: always
     env_file: .env
@@ -35,7 +35,7 @@ services:
     env_file: .env
     networks:
       - docker_network
-    volumes: 
+    volumes:
       - wordpress_volume:/var/www/html
     secrets:
       - db_password
@@ -50,7 +50,7 @@ services:
     env_file: .env
     networks:
       - docker_network
-    
+
   ftp:
     build: ./requirements/bonus/ftp
     container_name: ftp
@@ -110,13 +110,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/vitor/data/mariadb
+      device: /home/vitosant/data/mariadb
   wordpress_volume:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/vitor/data/wordpress
+      device: /home/vitosant/data/wordpress
 
 secrets:
   db_password:
