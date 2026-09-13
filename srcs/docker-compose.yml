@@ -2,7 +2,6 @@ services:
   nginx:
     build: ./requirements/nginx
     container_name: nginx
-    image: nginx
     ports:
       - "443:443"
     restart: always
@@ -15,7 +14,6 @@ services:
   mariadb:
     build: ./requirements/mariadb
     container_name: mariadb
-    image: mariadb
     restart: always
     env_file: .env
     networks:
@@ -30,7 +28,6 @@ services:
   wordpress:
     build: ./requirements/wordpress
     container_name: wordpress
-    image: wordpress
     restart: always
     env_file: .env
     networks:
@@ -45,7 +42,6 @@ services:
   redis:
     build: ./requirements/bonus/redis
     container_name: redis
-    image: redis
     restart: always
     env_file: .env
     networks:
@@ -54,7 +50,6 @@ services:
   ftp:
     build: ./requirements/bonus/ftp
     container_name: ftp
-    image: ftp
     restart: always
     env_file: .env
     networks:
@@ -70,7 +65,6 @@ services:
   static_site:
     build: ./requirements/bonus/static_site
     container_name: static_site
-    image: static_site
     restart: always
     env_file: .env
     networks:
@@ -81,7 +75,6 @@ services:
   adminer:
     build: ./requirements/bonus/adminer
     container_name: adminer
-    image: adminer
     restart: always
     networks:
       - docker_network
@@ -91,7 +84,6 @@ services:
   portainer:
     build: ./requirements/bonus/portainer
     container_name: portainer
-    image: portainer
     restart: always
     networks:
       - docker_network
